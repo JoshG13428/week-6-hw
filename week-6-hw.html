@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Week_6_HW</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+<style type="text/css">
+#gifsAppearHere{
+
+width:60%;	
+
+}
+
+.item{
+
+	display:inline-block;
+
+}
+
+.container{
+
+	position:relative;
+	left:900px;
+
+
+}
+
+
+</style>
+</head>
+<body>
+<div id="buttons">
+		<button type="button" class="btn btn-success" data-animal="cat">cat</button>
+		<button type="button" class="btn btn-success" data-animal="frog">frog</button>
+		<button type="button" class="btn btn-success" data-animal="fox">fox</button>
+		<button type="button" class="btn btn-success" data-animal="fish">fish</button>
+		<button type="button" class="btn btn-success" data-animal="walrus">walrus</button>
+		<button type="button" class="btn btn-success" data-animal="giraffe">giraffe</button>
+		<button type="button" class="btn btn-success" data-animal="pig">pig</button>
+		<button type="button" class="btn btn-success" data-animal="sheep">sheep</button>
+		<button type="button" class="btn btn-success" data-animal="horse">horse</button>
+		
+</div>
+<div class="container">
+  <h1>Gif Search</h1>
+  <form id="gif-form">
+    <label for="gif-input">Search for a Gif</label>
+    <input type="text" id="gif-input"><br>
+    
+    <!-- This button will trigger our AJAX call -->
+    <input id="findGif" type="submit" value="Search">
+  </form>
+</div>
+
+<div id="gifsAppearHere">
+ </div>
+<script src='http://code.jquery.com/jquery-2.1.3.min.js'></script>
+<script type="text/javascript">
+	
+$('#findGif').on('click', function(){
+
+		// Here we grab the text from the input box 
+		var animal = $('#gif-input').val();
+
+		// Here we assemble our URL 
+		var queryURL = "http://api.giphy.com/v1/gifs/search?q=" + animal + "&api_key=dc6zaTOxFJmzC&limit=10";
+
+
+$.ajax({url: queryURL, method: 'GET'}).done(function(response) {
+	     	 $("gifsAppearHere").html(response);
+		}); 
+		
+	})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+$('button').on('click', function() {	
+var p = $(this).data('animal');	
+
+var queryURL = "http://api.giphy.com/v1/gifs/search?q=" + p + "&api_key=dc6zaTOxFJmzC&limit=10";
+
+$.ajax({
+         url: queryURL,
+         method: 'GET'
+  })
+    .done(function(response) {
+
+    	var results = response.data;
+    	for (var i = 0; i < results.length; i++) {
+                    var gifDiv = $('<div class="item">')
+
+                    var rating = results[i].rating;
+
+                    var p = $('<p>').text("Rating: " + rating);
+
+                    var personImage = $('<img>');
+                    personImage.attr('src', results[i].images.fixed_height.url);
+                    personImage.attr('data-state', 'still');
+
+                    gifDiv.append(p)
+                    gifDiv.append(personImage)
+
+                    $('#gifsAppearHere').prepend(gifDiv);
+                }
+
+            });
+    });
+
+		 $('#item').on('click', function(){
+	    	
+
+	    	var state = $("img").attr('data-state');
+            var $animate = $("img").attr('data-state');
+            var $still = $("img").attr('data-state');
+
+        	if (state = 'still') {
+                $(this).attr('src', $animate)
+                $(this).attr('data-state', 'animate')
+            } else {
+                $(this).attr('src', $still)
+                $(this).attr('data-state', 'still')
+            }
+
+	    });
+
+
+
+
+</script>
+</body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</html>
